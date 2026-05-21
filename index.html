@@ -1,44 +1,1709 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EquidadeIA</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,800;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-:root {
-  --verde:#1a6b4a;--verde-claro:#2d9b6c;--verde-suave:#e8f5ef;
-  --azul:#1a4fa3;--azul-claro:#2563eb;--azul-suave:#e8f0fd;
-  --amarelo:#f5c842;--amarelo-suave:#fdf8e3;
-  --cinza-escuro:#1c1c1e;--cinza:#4a4a52;
-  --branco:#f6fbf8;--borda:#c8dfd0;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--branco);color:var(--cinza-escuro);min-height:100vh;}
-.pagina{display:none;min-height:100vh;position:relative;}
-.pagina.ativa{display:block;}
-#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
-header,main,footer,.login-wrap{position:relative;z-index:1;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
-.perfis-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:1.5rem;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EquidadeIA</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,800;1,300&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --verde: #1a6b4a;
+            --verde-claro: #2d9b6c;
+            --verde-suave: #e8f5ef;
+            --azul: #1a4fa3;
+            --azul-claro: #2563eb;
+            --azul-suave: #e8f0fd;
+            --amarelo: #f5c842;
+            --amarelo-suave: #fdf8e3;
+            --cinza-escuro: #1c1c1e;
+            --cinza: #4a4a52;
+            --branco: #f6fbf8;
+            --borda: #c8dfd0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--branco);
+            color: var(--cinza-escuro);
+            min-height: 100vh;
+        }
+
+        /* ── PÁGINAS ── */
+        .pagina {
+            display: none;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .pagina.ativa {
+            display: block;
+        }
+
+        /* ── FUNDO SVG FIXO ── */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        header,
+        main,
+        footer,
+        .login-wrap {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── HEADER ── */
+        header {
+            background: linear-gradient(135deg, #1a4fa3 0%, #1a6b4a 100%);
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 16px rgba(26, 79, 163, .25);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: var(--amarelo);
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .logo-text {
+            font-family: 'Fraunces', serif;
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: white;
+        }
+
+        .logo-text span {
+            color: var(--amarelo);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+        }
+
+        .header-badge {
+            background: rgba(255, 255, 255, .18);
+            color: white;
+            font-size: .68rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 255, 255, .25);
+        }
+
+        .btn-nav {
+            background: rgba(255, 255, 255, .15);
+            color: white;
+            border: 1.5px solid rgba(255, 255, 255, .3);
+            border-radius: 10px;
+            padding: .4rem .9rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: .78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .btn-nav:hover {
+            background: rgba(255, 255, 255, .28);
+        }
+
+        /* ── LAYOUT ── */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            text-align: center;
+            padding: 2rem 0 1.75rem;
+            animation: fadeUp .5s ease;
+        }
+
+        .hero h1 {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(1.7rem, 4vw, 2.4rem);
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: .7rem;
+        }
+
+        .hero h1 em {
+            color: var(--verde);
+            font-style: italic;
+        }
+
+        .hero p {
+            color: var(--cinza);
+            font-size: .97rem;
+            max-width: 520px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .section-label {
+            font-size: .72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--azul);
+            margin-bottom: .8rem;
+        }
+
+        /* ── PERFIS ── */
+        .perfis-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: .75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media(min-width:600px) {
+            .perfis-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .perfil-card {
+            border: 2px solid var(--borda);
+            border-radius: 14px;
+            padding: 1rem .75rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all .2s;
+            background: rgba(255, 255, 255, .85);
+            user-select: none;
+            backdrop-filter: blur(4px);
+        }
+
+        .perfil-card:hover {
+            border-color: var(--azul-claro);
+            background: var(--azul-suave);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(37, 99, 235, .12);
+        }
+
+        .perfil-card.ativo {
+            border-color: var(--azul);
+            background: var(--azul-suave);
+            box-shadow: 0 0 0 3px rgba(26, 79, 163, .15);
+        }
+
+        .perfil-emoji {
+            font-size: 1.8rem;
+            display: block;
+            margin-bottom: .4rem;
+        }
+
+        .perfil-nome {
+            font-size: .78rem;
+            font-weight: 600;
+            color: var(--cinza-escuro);
+            display: block;
+            line-height: 1.3;
+        }
+
+        /* ── FORM ── */
+        .form-card {
+            background: rgba(255, 255, 255, .88);
+            border: 1.5px solid var(--borda);
+            border-radius: 20px;
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 20px rgba(26, 79, 163, .07);
+            backdrop-filter: blur(6px);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            font-size: .82rem;
+            font-weight: 600;
+            color: var(--azul);
+            margin-bottom: .5rem;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            border: 1.5px solid var(--borda);
+            border-radius: 10px;
+            padding: .75rem 1rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: .95rem;
+            color: var(--cinza-escuro);
+            background: rgba(248, 252, 255, .9);
+            transition: border-color .2s;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--azul-claro);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, .1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            line-height: 1.5;
+        }
+
+        .row-dois {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media(max-width:480px) {
+            .row-dois {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ── CHIPS ── */
+        .adaptacoes-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .5rem;
+        }
+
+        .chip {
+            padding: .45rem .9rem;
+            border-radius: 20px;
+            border: 1.5px solid var(--borda);
+            font-size: .82rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all .15s;
+            background: white;
+            user-select: none;
+        }
+
+        .chip:hover {
+            border-color: var(--verde-claro);
+            background: var(--verde-suave);
+        }
+
+        .chip.ativo {
+            background: var(--verde);
+            color: white;
+            border-color: var(--verde);
+        }
+
+        /* ── BOTÕES ── */
+        .btn-gerar {
+            width: 100%;
+            background: linear-gradient(135deg, var(--azul), var(--verde));
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 1rem 1.5rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: .6rem;
+            box-shadow: 0 4px 16px rgba(26, 79, 163, .25);
+        }
+
+        .btn-gerar:hover:not(:disabled) {
+            opacity: .92;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(26, 79, 163, .3);
+        }
+
+        .btn-gerar:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+        }
+
+        /* ── RESULTADO ── */
+        .resultado-area {
+            display: none;
+            animation: fadeUp .4s ease;
+        }
+
+        .resultado-area.visivel {
+            display: block;
+        }
+
+        .resultado-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: .5rem;
+        }
+
+        .resultado-titulo {
+            font-family: 'Fraunces', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .btn-copiar {
+            background: var(--amarelo-suave);
+            border: 1.5px solid var(--amarelo);
+            color: var(--cinza-escuro);
+            border-radius: 10px;
+            padding: .5rem 1rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: .82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .15s;
+        }
+
+        .btn-copiar:hover {
+            background: var(--amarelo);
+        }
+
+        .resultado-box {
+            background: rgba(255, 255, 255, .92);
+            border: 1.5px solid var(--borda);
+            border-radius: 20px;
+            padding: 1.75rem;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, .05);
+            line-height: 1.75;
+            font-size: .95rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            backdrop-filter: blur(4px);
+        }
+
+        .resultado-box h3 {
+            font-family: 'Fraunces', serif;
+            font-size: 1.1rem;
+            margin: 1rem 0 .4rem;
+            color: var(--verde);
+        }
+
+        .resultado-box h3:first-child {
+            margin-top: 0;
+        }
+
+        .tag-perfil {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            background: var(--azul-suave);
+            border: 1.5px solid var(--azul);
+            color: var(--azul);
+            border-radius: 20px;
+            padding: .3rem .75rem;
+            font-size: .78rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* ── LOADING / ERRO ── */
+        .loading-area {
+            display: none;
+            text-align: center;
+            padding: 2.5rem;
+            animation: fadeUp .3s ease;
+        }
+
+        .loading-area.visivel {
+            display: block;
+        }
+
+        .spinner {
+            width: 44px;
+            height: 44px;
+            border: 4px solid var(--azul-suave);
+            border-top-color: var(--azul);
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        .loading-texto {
+            color: var(--cinza);
+            font-size: .9rem;
+            font-style: italic;
+        }
+
+        .erro-box {
+            display: none;
+            background: #fff5f5;
+            border: 1.5px solid #ffcccc;
+            border-radius: 14px;
+            padding: 1rem 1.25rem;
+            color: #c0392b;
+            font-size: .88rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .erro-box.visivel {
+            display: block;
+        }
+
+        /* ── NOTA ── */
+        .nota {
+            background: linear-gradient(135deg, rgba(232, 240, 253, .85), rgba(232, 245, 239, .85));
+            border: 1.5px solid #a8c4e8;
+            border-radius: 14px;
+            padding: 1rem 1.25rem;
+            font-size: .82rem;
+            color: #1a3a6b;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: .6rem;
+            align-items: flex-start;
+            backdrop-filter: blur(4px);
+        }
+
+        .divisor {
+            height: 1px;
+            background: var(--borda);
+            margin: 2rem 0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            font-size: .75rem;
+            color: #7a9a88;
+            border-top: 1px solid var(--borda);
+            background: rgba(255, 255, 255, .6);
+            backdrop-filter: blur(4px);
+        }
+
+        footer strong {
+            color: var(--verde);
+        }
+
+        /* ══════════════════════════════════
+   PÁGINA 3 — CATÁLOGO DE ATIVIDADES
+   ══════════════════════════════════ */
+        .perfil-tabs {
+            display: flex;
+            gap: .5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.75rem;
+        }
+
+        .perfil-tab {
+            padding: .6rem 1.2rem;
+            border-radius: 30px;
+            border: 2px solid var(--borda);
+            font-size: .85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s;
+            background: rgba(255, 255, 255, .85);
+            backdrop-filter: blur(4px);
+        }
+
+        .perfil-tab:hover {
+            transform: translateY(-1px);
+        }
+
+        .perfil-tab[data-p="TEA"].ativo {
+            background: #dbeafe;
+            border-color: #2563eb;
+            color: #1e3a8a;
+        }
+
+        .perfil-tab[data-p="TDAH"].ativo {
+            background: #fef9c3;
+            border-color: #eab308;
+            color: #78350f;
+        }
+
+        .perfil-tab[data-p="Dislexia"].ativo {
+            background: #ffedd5;
+            border-color: #f97316;
+            color: #7c2d12;
+        }
+
+        .perfil-tab[data-p="Discalculia"].ativo {
+            background: #ede9fe;
+            border-color: #7c3aed;
+            color: #3b0764;
+        }
+
+        .atividades-painel {
+            display: none;
+        }
+
+        .atividades-painel.ativo {
+            display: block;
+            animation: fadeUp .35s ease;
+        }
+
+        .painel-intro {
+            background: rgba(255, 255, 255, .88);
+            border: 1.5px solid var(--borda);
+            border-radius: 18px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.25rem;
+            backdrop-filter: blur(4px);
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .painel-intro-icon {
+            font-size: 2.2rem;
+            flex-shrink: 0;
+        }
+
+        .painel-intro h3 {
+            font-family: 'Fraunces', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: .3rem;
+        }
+
+        .painel-intro p {
+            font-size: .85rem;
+            color: var(--cinza);
+            line-height: 1.55;
+        }
+
+        .atividades-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .ativ-card {
+            background: rgba(255, 255, 255, .9);
+            border: 1.5px solid var(--borda);
+            border-radius: 16px;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all .2s;
+            backdrop-filter: blur(4px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ativ-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .ativ-card[data-p="TEA"]::before {
+            background: linear-gradient(90deg, #2563eb, #60a5fa);
+        }
+
+        .ativ-card[data-p="TDAH"]::before {
+            background: linear-gradient(90deg, #eab308, #fde047);
+        }
+
+        .ativ-card[data-p="Dislexia"]::before {
+            background: linear-gradient(90deg, #f97316, #fdba74);
+        }
+
+        .ativ-card[data-p="Discalculia"]::before {
+            background: linear-gradient(90deg, #7c3aed, #a78bfa);
+        }
+
+        .ativ-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, .1);
+        }
+
+        .ativ-card-emoji {
+            font-size: 1.6rem;
+            margin-bottom: .6rem;
+            display: block;
+        }
+
+        .ativ-card-titulo {
+            font-weight: 700;
+            font-size: .92rem;
+            color: var(--cinza-escuro);
+            margin-bottom: .35rem;
+        }
+
+        .ativ-card-desc {
+            font-size: .78rem;
+            color: var(--cinza);
+            line-height: 1.5;
+            margin-bottom: .75rem;
+        }
+
+        .ativ-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .3rem;
+        }
+
+        .ativ-tag {
+            font-size: .68rem;
+            font-weight: 600;
+            padding: .2rem .55rem;
+            border-radius: 10px;
+        }
+
+        .ativ-tag.azul {
+            background: #dbeafe;
+            color: #1e3a8a;
+        }
+
+        .ativ-tag.verde {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .ativ-tag.amarelo {
+            background: #fef9c3;
+            color: #78350f;
+        }
+
+        .ativ-tag.laranja {
+            background: #ffedd5;
+            color: #7c2d12;
+        }
+
+        .ativ-tag.roxo {
+            background: #ede9fe;
+            color: #3b0764;
+        }
+
+        .btn-usar-ativ {
+            margin-top: .85rem;
+            width: 100%;
+            background: linear-gradient(135deg, var(--azul), var(--verde));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: .55rem .9rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: .8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s;
+            box-shadow: 0 3px 10px rgba(26, 79, 163, .2);
+        }
+
+        .btn-usar-ativ:hover {
+            opacity: .88;
+            transform: translateY(-1px);
+        }
+
+        /* ── ANIMAÇÕES ── */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
+
 <body>
-<div id="pGerador" class="pagina ativa">
-  <main>
-    <h2>Gerador de Atividades</h2>
-    <div class="perfis-grid">
-      <div onclick="selecionarPerfil('TEA')">TEA</div>
-      <div onclick="selecionarPerfil('TDAH')">TDAH</div>
+
+    <!-- ══════════════ PÁGINA 1: LOGIN ══════════════ -->
+    <div id="pLogin" class="pagina ativa"
+        style="background:linear-gradient(135deg,#1a4fa3 0%,#1a6b4a 60%,#2d8a5e 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;">
+        <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 800 600"
+            preserveAspectRatio="xMidYMid slice">
+            <g transform="translate(580,15)" opacity="0.16">
+                <path d="M0,80 Q0,0 100,0 Q200,0 200,80" fill="none" stroke="#ef4444" stroke-width="11"
+                    stroke-linecap="round" />
+                <path d="M16,80 Q16,18 100,18 Q184,18 184,80" fill="none" stroke="#f97316" stroke-width="10"
+                    stroke-linecap="round" />
+                <path d="M32,80 Q32,34 100,34 Q168,34 168,80" fill="none" stroke="#f5c842" stroke-width="9"
+                    stroke-linecap="round" />
+                <path d="M48,80 Q48,48 100,48 Q152,48 152,80" fill="none" stroke="#22c55e" stroke-width="8"
+                    stroke-linecap="round" />
+                <path d="M64,80 Q64,60 100,60 Q136,60 136,80" fill="none" stroke="#60a5fa" stroke-width="7"
+                    stroke-linecap="round" />
+            </g>
+            <g transform="translate(20,410)" opacity="0.13">
+                <rect x="0" y="0" width="50" height="50" rx="5" fill="#60a5fa" />
+                <circle cx="25" cy="-9" r="9" fill="#60a5fa" />
+                <circle cx="59" cy="25" r="9" fill="#60a5fa" />
+                <rect x="50" y="0" width="50" height="50" rx="5" fill="#93c5fd" />
+                <circle cx="-9" cy="25" r="9" fill="#93c5fd" />
+            </g>
+            <g transform="translate(720,280)" opacity="0.15">
+                <polygon points="22,0 6,40 18,40 2,80 38,30 22,30 44,0" fill="#f5c842" />
+            </g>
+            <polygon points="80,80 84,92 96,92 87,100 90,112 80,104 70,112 73,100 64,92 76,92" fill="#f5c842"
+                opacity="0.2" />
+            <g stroke="#86efac" stroke-width="1.5" fill="none" opacity="0.14">
+                <circle cx="100" cy="200" r="8" fill="#86efac" />
+                <circle cx="180" cy="155" r="7" fill="#86efac" />
+                <circle cx="140" cy="270" r="8" fill="#86efac" />
+                <line x1="108" y1="202" x2="173" y2="158" />
+                <line x1="140" y1="262" x2="103" y2="207" />
+                <line x1="140" y1="262" x2="175" y2="160" />
+            </g>
+            <g transform="translate(230,545)" opacity="0.15">
+                <circle cx="0" cy="-25" r="10" fill="#60a5fa" />
+                <rect x="-9" y="-15" width="18" height="22" rx="5" fill="#60a5fa" />
+                <circle cx="45" cy="-28" r="10" fill="#86efac" />
+                <rect x="36" y="-18" width="18" height="22" rx="5" fill="#86efac" />
+                <circle cx="90" cy="-25" r="10" fill="#f5c842" />
+                <rect x="81" y="-15" width="18" height="22" rx="5" fill="#f5c842" />
+                <circle cx="135" cy="-28" r="10" fill="#93c5fd" />
+                <rect x="126" y="-18" width="18" height="22" rx="5" fill="#93c5fd" />
+                <line x1="12" y1="-8" x2="32" y2="-9" stroke="white" stroke-width="2.5" stroke-linecap="round" />
+                <line x1="57" y1="-9" x2="77" y2="-8" stroke="white" stroke-width="2.5" stroke-linecap="round" />
+                <line x1="102" y1="-8" x2="122" y2="-9" stroke="white" stroke-width="2.5" stroke-linecap="round" />
+            </g>
+        </svg>
+
+        <div
+            style="background:rgba(255,255,255,.97);border-radius:24px;padding:2.5rem 2rem;width:100%;max-width:420px;box-shadow:0 24px 60px rgba(0,0,0,.3);position:relative;z-index:1;">
+            <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:1.75rem;">
+                <div
+                    style="width:48px;height:48px;background:linear-gradient(135deg,#1a4fa3,#1a6b4a);border-radius:14px;display:flex;align-items:center;justify-content:center;">
+                    <svg viewBox="0 0 26 26" fill="none" width="30" height="30">
+                        <rect x="12" y="3" width="2" height="18" rx="1" fill="white" />
+                        <rect x="3" y="5" width="20" height="2" rx="1" fill="white" />
+                        <line x1="5" y1="7" x2="5" y2="12" stroke="white" stroke-width="1.5" />
+                        <line x1="21" y1="7" x2="21" y2="14" stroke="#f5c842" stroke-width="1.5" />
+                        <ellipse cx="5" cy="12" rx="4" ry="1.2" fill="white" />
+                        <ellipse cx="21" cy="14" rx="4" ry="1.2" fill="#f5c842" />
+                        <rect x="18" y="15" width="6" height="2.5" rx=".5" fill="#f5c842" />
+                        <circle cx="5" cy="9.5" r="1.5" fill="#93c5fd" />
+                        <circle cx="21" cy="11" r="1.5" fill="#86efac" />
+                        <polygon points="11,21 15,21 14,23 12,23" fill="white" />
+                    </svg>
+                </div>
+                <div>
+                    <div style="font-family:'Fraunces',serif;font-weight:800;font-size:1.5rem;color:#1c1c1e;">
+                        Equidade<span style="color:#1a4fa3;">IA</span></div>
+                    <div
+                        style="font-size:.72rem;color:#6b7280;font-weight:500;letter-spacing:.5px;text-transform:uppercase;">
+                        Educação Inclusiva · Piauí</div>
+                </div>
+            </div>
+            <h2
+                style="font-family:'Fraunces',serif;font-size:1.2rem;font-weight:700;color:#1c1c1e;text-align:center;margin-bottom:.4rem;">
+                Acesso ao Sistema</h2>
+            <p style="text-align:center;font-size:.84rem;color:#6b7280;margin-bottom:1.75rem;line-height:1.5;">Informe
+                seu CPF para acessar.<br>Apenas professores cadastrados pela 13ª GRE.</p>
+
+            <div style="margin-bottom:1.1rem;">
+                <label
+                    style="display:block;font-size:.74rem;font-weight:700;color:#1a4fa3;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.5px;">CPF
+                    do Professor</label>
+                <div style="position:relative;">
+                    <span
+                        style="position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:1.1rem;">🪪</span>
+                    <input id="inputCpf" type="text" inputmode="numeric" maxlength="14" placeholder="000.000.000-00"
+                        oninput="mascaraCpf(this)" onkeydown="if(event.key==='Enter')entrar()"
+                        style="width:100%;border:2px solid #d1d5db;border-radius:12px;padding:.8rem 1rem .8rem 2.7rem;font-family:'DM Sans',sans-serif;font-size:1.05rem;color:#1c1c1e;outline:none;transition:border-color .2s;letter-spacing:1px;" />
+                </div>
+                <div id="cpfErro"
+                    style="display:none;color:#dc2626;font-size:.78rem;margin-top:.35rem;padding-left:4px;">⚠️ CPF
+                    inválido. Verifique e tente novamente.</div>
+            </div>
+
+            <div id="campoNome" style="display:none;margin-bottom:1.1rem;animation:fadeUp .3s ease;">
+                <label
+                    style="display:block;font-size:.74rem;font-weight:700;color:#1a6b4a;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.5px;">Nome
+                    completo</label>
+                <input id="inputNome" type="text" placeholder="Seu nome completo" maxlength="80"
+                    onkeydown="if(event.key==='Enter')entrar()"
+                    style="width:100%;border:2px solid #d1d5db;border-radius:12px;padding:.8rem 1rem;font-family:'DM Sans',sans-serif;font-size:.95rem;color:#1c1c1e;outline:none;transition:border-color .2s;" />
+                <div id="nomeErro"
+                    style="display:none;color:#dc2626;font-size:.78rem;margin-top:.35rem;padding-left:4px;">⚠️ Informe
+                    seu nome completo.</div>
+            </div>
+
+            <div id="campoEscola" style="display:none;margin-bottom:1.5rem;animation:fadeUp .3s ease;">
+                <label
+                    style="display:block;font-size:.74rem;font-weight:700;color:#1a6b4a;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.5px;">Escola
+                    / Unidade</label>
+                <select id="inputEscola"
+                    style="width:100%;border:2px solid #d1d5db;border-radius:12px;padding:.8rem 1rem;font-family:'DM Sans',sans-serif;font-size:.92rem;color:#1c1c1e;outline:none;background:white;-webkit-appearance:none;">
+                    <option value="">Selecione sua escola...</option>
+                    <option>CETI Letícia Macedo</option>
+                    <option>UESPI – Campus Campo Maior</option>
+                    <option>E.E. João Pessoa</option>
+                    <option>E.E. Coelho Rodrigues</option>
+                    <option>Outra unidade da 13ª GRE</option>
+                </select>
+            </div>
+
+            <button onclick="entrar()"
+                style="width:100%;background:linear-gradient(135deg,#1a4fa3,#1a6b4a);color:white;border:none;border-radius:14px;padding:1rem;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(26,79,163,.3);">
+                Acessar Plataforma →
+            </button>
+            <p style="text-align:center;font-size:.72rem;color:#9ca3af;margin-top:1.1rem;line-height:1.5;">🔒 Dados
+                protegidos · Uso exclusivo para autenticação<br>Dúvidas? Contate a 13ª GRE – Piauí.</p>
+        </div>
+        <p style="color:rgba(255,255,255,.6);font-size:.76rem;margin-top:1.1rem;text-align:center;">Projeto <strong
+                style="color:#f5c842;">Do Piauí para o Mundo</strong> · CETI Letícia Macedo · 2026</p>
     </div>
-    <textarea id="conteudo" placeholder="Conteúdo"></textarea>
-    <button onclick="gerarAtividade()">Gerar</button>
-  </main>
-</div>
-<script>
-let perfilSelecionado='';
-function selecionarPerfil(p) { perfilSelecionado = p; alert("Selecionado: " + p); }
-function gerarAtividade() { alert("Gerando com IA..."); }
-</script>
+
+    <!-- ══════════════ FUNDO SVG (págs 2 e 3) ══════════════ -->
+    <svg id="bg-canvas" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+        <defs>
+            <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#dbeafe" />
+                <stop offset="50%" stop-color="#d1fae5" />
+                <stop offset="100%" stop-color="#fef9c3" />
+            </linearGradient>
+        </defs>
+        <rect width="1440" height="900" fill="url(#bgGrad)" />
+        <g transform="translate(900,20)" opacity="0.15">
+            <path d="M0,80 Q0,0 110,0 Q220,0 220,80" fill="none" stroke="#ef4444" stroke-width="11"
+                stroke-linecap="round" />
+            <path d="M16,80 Q16,16 110,16 Q204,16 204,80" fill="none" stroke="#f97316" stroke-width="10"
+                stroke-linecap="round" />
+            <path d="M32,80 Q32,30 110,30 Q188,30 188,80" fill="none" stroke="#f5c842" stroke-width="9"
+                stroke-linecap="round" />
+            <path d="M48,80 Q48,44 110,44 Q172,44 172,80" fill="none" stroke="#22c55e" stroke-width="8"
+                stroke-linecap="round" />
+            <path d="M64,80 Q64,56 110,56 Q156,56 156,80" fill="none" stroke="#3b82f6" stroke-width="7"
+                stroke-linecap="round" />
+            <path d="M80,80 Q80,68 110,68 Q140,68 140,80" fill="none" stroke="#8b5cf6" stroke-width="6"
+                stroke-linecap="round" />
+        </g>
+        <g transform="translate(40,80)" opacity="0.13">
+            <rect x="0" y="0" width="60" height="60" rx="6" fill="#2563eb" />
+            <circle cx="30" cy="-10" r="10" fill="#2563eb" />
+            <circle cx="70" cy="30" r="10" fill="#2563eb" />
+            <rect x="60" y="0" width="60" height="60" rx="6" fill="#1d4ed8" />
+            <circle cx="-10" cy="30" r="10" fill="#1d4ed8" />
+            <rect x="0" y="60" width="60" height="60" rx="6" fill="#1a4fa3" />
+            <circle cx="30" cy="130" r="10" fill="#1a4fa3" />
+            <rect x="60" y="60" width="60" height="60" rx="6" fill="#3b82f6" />
+            <circle cx="130" cy="90" r="10" fill="#3b82f6" />
+        </g>
+        <g transform="translate(1330,160)" opacity="0.15">
+            <polygon points="28,0 8,50 24,50 4,100 48,38 30,38 54,0" fill="#f5c842" />
+        </g>
+        <g transform="translate(620,340)" opacity="0.06">
+            <rect x="-4" y="-110" width="8" height="200" rx="4" fill="#1a4fa3" />
+            <rect x="-120" y="-110" width="240" height="10" rx="5" fill="#1a4fa3" />
+            <line x1="-100" y1="-100" x2="-100" y2="-38" stroke="#1a4fa3" stroke-width="2.5" stroke-dasharray="5,4" />
+            <line x1="100" y1="-100" x2="100" y2="-18" stroke="#1a6b4a" stroke-width="2.5" stroke-dasharray="5,4" />
+            <ellipse cx="-100" cy="-38" rx="46" ry="9" fill="#1a4fa3" />
+            <ellipse cx="100" cy="-18" rx="46" ry="9" fill="#1a6b4a" />
+            <circle cx="-112" cy="-66" r="11" fill="#2563eb" />
+            <rect x="-122" y="-55" width="20" height="20" rx="5" fill="#2563eb" />
+            <circle cx="100" cy="-54" r="13" fill="#1a6b4a" />
+            <rect x="88" y="-41" width="24" height="25" rx="6" fill="#1a6b4a" />
+            <rect x="87" y="-16" width="28" height="10" rx="3" fill="#f5c842" />
+            <polygon points="-28,90 28,90 14,80 -14,80" fill="#1a4fa3" />
+            <polygon points="0,-128 5,-116 18,-116 8,-108 12,-96 0,-104 -12,-96 -8,-108 -18,-116 -5,-116"
+                fill="#f5c842" />
+        </g>
+        <g transform="translate(100,820)" opacity="0.14">
+            <circle cx="0" cy="-30" r="12" fill="#2563eb" />
+            <rect x="-10" y="-18" width="22" height="28" rx="5" fill="#2563eb" />
+            <circle cx="55" cy="-34" r="12" fill="#1a6b4a" />
+            <rect x="45" y="-22" width="22" height="28" rx="5" fill="#1a6b4a" />
+            <circle cx="110" cy="-30" r="12" fill="#f5c842" />
+            <rect x="100" y="-18" width="22" height="28" rx="5" fill="#f5c842" />
+            <circle cx="165" cy="-34" r="12" fill="#1a4fa3" />
+            <rect x="155" y="-22" width="22" height="28" rx="5" fill="#1a4fa3" />
+            <line x1="14" y1="-9" x2="41" y2="-11" stroke="#1a4fa3" stroke-width="3" stroke-linecap="round" />
+            <line x1="69" y1="-11" x2="96" y2="-9" stroke="#1a4fa3" stroke-width="3" stroke-linecap="round" />
+            <line x1="124" y1="-9" x2="151" y2="-11" stroke="#1a4fa3" stroke-width="3" stroke-linecap="round" />
+        </g>
+        <circle cx="1430" cy="450" r="80" fill="#2563eb" opacity="0.05" />
+        <circle cx="10" cy="500" r="60" fill="#1a6b4a" opacity="0.06" />
+        <circle cx="720" cy="880" r="100" fill="#f5c842" opacity="0.07" />
+    </svg>
+
+    <!-- ══════════════ PÁGINA 2: GERADOR ══════════════ -->
+    <div id="pGerador" class="pagina">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 26 26" fill="none">
+                        <rect x="12" y="3" width="2" height="18" rx="1" fill="#1a4fa3" />
+                        <rect x="3" y="5" width="20" height="2" rx="1" fill="#1a4fa3" />
+                        <line x1="5" y1="7" x2="5" y2="12" stroke="#1a4fa3" stroke-width="1.5" />
+                        <line x1="21" y1="7" x2="21" y2="14" stroke="#1a6b4a" stroke-width="1.5" />
+                        <ellipse cx="5" cy="12" rx="4" ry="1.2" fill="#1a4fa3" />
+                        <ellipse cx="21" cy="14" rx="4" ry="1.2" fill="#1a6b4a" />
+                        <rect x="18" y="15" width="6" height="2.5" rx=".5" fill="#f5c842" />
+                        <circle cx="5" cy="9.5" r="1.5" fill="#60a5fa" />
+                        <circle cx="21" cy="11" r="1.5" fill="#86efac" />
+                        <polygon points="11,21 15,21 14,23 12,23" fill="#1a4fa3" />
+                    </svg>
+                </div>
+                <span class="logo-text">Equidade<span>IA</span></span>
+            </div>
+            <div class="header-right">
+                <button class="btn-nav" onclick="irPara('pCatalogo')">📚 Catálogo</button>
+                <span class="header-badge">MVP · Piauí 2026</span>
+            </div>
+        </header>
+
+        <main>
+            <section class="hero">
+                <h1>Atividades adaptadas para<br><em>cada estudante</em>, em minutos.</h1>
+                <p>Descreva o conteúdo, selecione o perfil do aluno e receba uma atividade inclusiva gerada por IA.</p>
+            </section>
+
+            <div class="nota">
+                <span style="flex-shrink:0;margin-top:1px;">💡</span>
+                <span>Módulo <strong>Gerador de Atividades Adaptadas</strong> · IA Claude (Anthropic) com prompts
+                    especializados em educação inclusiva e neurodiversidade.</span>
+            </div>
+
+            <div class="form-group">
+                <div class="section-label">1. Perfil do aluno neurodivergente</div>
+                <div class="perfis-grid">
+                    <div class="perfil-card" data-perfil="TEA" onclick="selecionarPerfil(this)">
+                        <span class="perfil-emoji">🔵</span>
+                        <span class="perfil-nome">TEA<br><small style="font-weight:400;color:#666;">Espectro
+                                Autista</small></span>
+                    </div>
+                    <div class="perfil-card" data-perfil="TDAH" onclick="selecionarPerfil(this)">
+                        <span class="perfil-emoji">⚡</span>
+                        <span class="perfil-nome">TDAH<br><small style="font-weight:400;color:#666;">Déficit de
+                                Atenção</small></span>
+                    </div>
+                    <div class="perfil-card" data-perfil="Dislexia" onclick="selecionarPerfil(this)">
+                        <span class="perfil-emoji">📖</span>
+                        <span class="perfil-nome">Dislexia<br><small style="font-weight:400;color:#666;">Leitura e
+                                escrita</small></span>
+                    </div>
+                    <div class="perfil-card" data-perfil="Discalculia" onclick="selecionarPerfil(this)">
+                        <span class="perfil-emoji">🔢</span>
+                        <span class="perfil-nome">Discalculia<br><small style="font-weight:400;color:#666;">Raciocínio
+                                numérico</small></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <div class="section-label" style="margin-bottom:1.25rem;">2. Detalhes da atividade</div>
+                <div class="row-dois">
+                    <div class="form-group">
+                        <label>Disciplina</label>
+                        <select id="disciplina">
+                            <option value="">Selecione...</option>
+                            <option>Matemática</option>
+                            <option>Português</option>
+                            <option>Ciências</option>
+                            <option>História</option>
+                            <option>Geografia</option>
+                            <option>Biologia</option>
+                            <option>Física</option>
+                            <option>Química</option>
+                            <option>Inglês</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Ano / Série</label>
+                        <select id="serie">
+                            <option value="">Selecione...</option>
+                            <option>1º ano – Ensino Médio</option>
+                            <option>2º ano – Ensino Médio</option>
+                            <option>3º ano – Ensino Médio</option>
+                            <option>6º ano – Fund. II</option>
+                            <option>7º ano – Fund. II</option>
+                            <option>8º ano – Fund. II</option>
+                            <option>9º ano – Fund. II</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Conteúdo que deseja trabalhar</label>
+                    <textarea id="conteudo"
+                        placeholder="Ex: Equações do 1º grau, 3 questões de fixação, nível básico com enunciados curtos."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Tipos de adaptação desejados</label>
+                    <div class="adaptacoes-grid">
+                        <span class="chip" onclick="toggleChip(this)">Linguagem simplificada</span>
+                        <span class="chip" onclick="toggleChip(this)">Segmentação em etapas</span>
+                        <span class="chip" onclick="toggleChip(this)">Apoio visual descrito</span>
+                        <span class="chip" onclick="toggleChip(this)">Enunciados curtos</span>
+                        <span class="chip" onclick="toggleChip(this)">Exemplos concretos</span>
+                        <span class="chip" onclick="toggleChip(this)">Dicas de foco</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="erro-box" id="erroBox"></div>
+            <button class="btn-gerar" id="btnGerar" onclick="gerarAtividade()">
+                <span>✨</span> Gerar Atividade Adaptada
+            </button>
+            <div class="divisor"></div>
+
+            <div class="loading-area" id="loadingArea">
+                <div class="spinner"></div>
+                <p class="loading-texto">Gerando atividade personalizada com IA...<br>Isso pode levar alguns segundos.
+                </p>
+            </div>
+
+            <div class="resultado-area" id="resultadoArea">
+                <div class="resultado-header">
+                    <span class="resultado-titulo">📄 Atividade Adaptada</span>
+                    <button class="btn-copiar" onclick="copiarResultado()">📋 Copiar texto</button>
+                </div>
+                <div id="tagPerfil" class="tag-perfil"></div>
+                <div class="resultado-box" id="resultadoBox"></div>
+            </div>
+        </main>
+
+        <footer><strong>EquidadeIA</strong> · CETI Letícia Macedo · 13ª GRE · Piauí · 2026 · Educação Personalizada para
+            Todos</footer>
+    </div>
+
+    <!-- ══════════════ PÁGINA 3: CATÁLOGO ══════════════ -->
+    <div id="pCatalogo" class="pagina">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 26 26" fill="none">
+                        <rect x="12" y="3" width="2" height="18" rx="1" fill="#1a4fa3" />
+                        <rect x="3" y="5" width="20" height="2" rx="1" fill="#1a4fa3" />
+                        <line x1="5" y1="7" x2="5" y2="12" stroke="#1a4fa3" stroke-width="1.5" />
+                        <line x1="21" y1="7" x2="21" y2="14" stroke="#1a6b4a" stroke-width="1.5" />
+                        <ellipse cx="5" cy="12" rx="4" ry="1.2" fill="#1a4fa3" />
+                        <ellipse cx="21" cy="14" rx="4" ry="1.2" fill="#1a6b4a" />
+                        <rect x="18" y="15" width="6" height="2.5" rx=".5" fill="#f5c842" />
+                        <circle cx="5" cy="9.5" r="1.5" fill="#60a5fa" />
+                        <circle cx="21" cy="11" r="1.5" fill="#86efac" />
+                        <polygon points="11,21 15,21 14,23 12,23" fill="#1a4fa3" />
+                    </svg>
+                </div>
+                <span class="logo-text">Equidade<span>IA</span></span>
+            </div>
+            <div class="header-right">
+                <button class="btn-nav" onclick="irPara('pGerador')">✨ Gerador</button>
+                <span class="header-badge">MVP · Piauí 2026</span>
+            </div>
+        </header>
+
+        <main>
+            <section class="hero">
+                <h1>Catálogo de <em>Atividades Adaptadas</em></h1>
+                <p>Explore tipos de atividades recomendadas para cada perfil neurodivergente e envie direto ao Gerador
+                    com um clique.</p>
+            </section>
+
+            <!-- Tabs de perfil -->
+            <div class="section-label">Selecione o perfil</div>
+            <div class="perfil-tabs">
+                <div class="perfil-tab" data-p="TEA" onclick="abrirPainel('TEA',this)">🔵 TEA – Espectro Autista</div>
+                <div class="perfil-tab" data-p="TDAH" onclick="abrirPainel('TDAH',this)">⚡ TDAH</div>
+                <div class="perfil-tab" data-p="Dislexia" onclick="abrirPainel('Dislexia',this)">📖 Dislexia</div>
+                <div class="perfil-tab" data-p="Discalculia" onclick="abrirPainel('Discalculia',this)">🔢 Discalculia
+                </div>
+            </div>
+
+            <!-- ── PAINEL TEA ── -->
+            <div id="painel-TEA" class="atividades-painel">
+                <div class="painel-intro">
+                    <span class="painel-intro-icon">🔵</span>
+                    <div>
+                        <h3>TEA — Transtorno do Espectro Autista</h3>
+                        <p>Alunos com TEA se beneficiam de estrutura previsível, linguagem literal, instruções
+                            explícitas e contextos concretos. Evite metáforas, ambiguidades e mudanças abruptas de
+                            rotina.</p>
+                    </div>
+                </div>
+                <div class="atividades-grid">
+                    <div class="ativ-card" data-p="TEA">
+                        <span class="ativ-card-emoji">🗺️</span>
+                        <div class="ativ-card-titulo">Sequência Visual de Passos</div>
+                        <div class="ativ-card-desc">Atividade dividida em etapas numeradas com instrução clara em cada
+                            passo. Cada etapa tem apenas uma ação a realizar.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag azul">Estruturada</span><span
+                                class="ativ-tag verde">Visual</span><span class="ativ-tag azul">Previsível</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('TEA','Sequência visual de passos numerados: cada etapa com instrução única e clara')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="TEA">
+                        <span class="ativ-card-emoji">✅</span>
+                        <div class="ativ-card-titulo">Checklist de Tarefa</div>
+                        <div class="ativ-card-desc">Lista de verificação onde o aluno marca cada item concluído. Promove
+                            autonomia e senso de progresso.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag azul">Autonomia</span><span
+                                class="ativ-tag verde">Checklist</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('TEA','Checklist de tarefa com itens curtos e diretos, marcando cada etapa concluída')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="TEA">
+                        <span class="ativ-card-emoji">🔗</span>
+                        <div class="ativ-card-titulo">Associação de Conceitos</div>
+                        <div class="ativ-card-desc">Relacione colunas ou una pares. Atividade concreta, sem
+                            ambiguidades, com gabarito claro.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag azul">Concreto</span><span
+                                class="ativ-tag azul">Objetivo</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('TEA','Atividade de associação/ligar colunas com linguagem literal e sem ambiguidades')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="TEA">
+                        <span class="ativ-card-emoji">📋</span>
+                        <div class="ativ-card-titulo">Múltipla Escolha Estruturada</div>
+                        <div class="ativ-card-desc">Questões de múltipla escolha com enunciados diretos, 3 alternativas
+                            no máximo e sem "pegadinhas".</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag azul">Direto</span><span
+                                class="ativ-tag verde">Simples</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('TEA','Múltipla escolha com enunciados diretos, sem duplos sentidos, máximo 3 alternativas')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="TEA">
+                        <span class="ativ-card-emoji">🖼️</span>
+                        <div class="ativ-card-titulo">Descrição de Imagem com Roteiro</div>
+                        <div class="ativ-card-desc">O aluno responde perguntas específicas sobre uma imagem. Roteiro
+                            guia o que observar em cada passo.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag azul">Visual</span><span
+                                class="ativ-tag azul">Roteirizado</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('TEA','Descrição de imagem com roteiro de perguntas específicas e objetivas sobre cada elemento')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="TEA">
+                        <span class="ativ-card-emoji">📅</span>
+                        <div class="ativ-card-titulo">Linha do Tempo Sequencial</div>
+                        <div class="ativ-card-desc">Organizar eventos em ordem cronológica. Atividade previsível com
+                            começo, meio e fim claros.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag azul">Sequencial</span><span
+                                class="ativ-tag verde">Cronológico</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('TEA','Linha do tempo sequencial para organizar eventos em ordem, com linguagem literal')">Usar
+                            no Gerador →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── PAINEL TDAH ── -->
+            <div id="painel-TDAH" class="atividades-painel">
+                <div class="painel-intro">
+                    <span class="painel-intro-icon">⚡</span>
+                    <div>
+                        <h3>TDAH — Transtorno do Déficit de Atenção e Hiperatividade</h3>
+                        <p>Atividades curtas, variadas e com recompensa imediata de progresso. Divida em etapas
+                            pequenas, use checkboxes e alterne formatos para manter o engajamento.</p>
+                    </div>
+                </div>
+                <div class="atividades-grid">
+                    <div class="ativ-card" data-p="TDAH">
+                        <span class="ativ-card-emoji">⏱️</span>
+                        <div class="ativ-card-titulo">Desafio Cronometrado</div>
+                        <div class="ativ-card-desc">Atividade curta (5–10 min) com tempo definido. O limite de tempo
+                            aumenta o foco e reduz a procrastinação.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag amarelo">Engajamento</span><span
+                                class="ativ-tag verde">Foco</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('TDAH','Desafio cronometrado de 5 minutos: questões curtas e objetivas com variedade de formato')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="TDAH">
+                        <span class="ativ-card-emoji">🎯</span>
+                        <div class="ativ-card-titulo">Missão por Etapas</div>
+                        <div class="ativ-card-desc">Atividade gamificada em "missões" curtas. Cada etapa concluída dá
+                            sentimento de conquista.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag amarelo">Gamificada</span><span
+                                class="ativ-tag amarelo">Motivadora</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('TDAH','Atividade em formato de missões curtas e gamificadas com progressão clara entre etapas')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="TDAH">
+                        <span class="ativ-card-emoji">🔀</span>
+                        <div class="ativ-card-titulo">Atividade Multiformato</div>
+                        <div class="ativ-card-desc">Alterna entre V/F, lacuna, múltipla escolha e associação em uma
+                            mesma atividade. Variedade mantém a atenção.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag amarelo">Variado</span><span
+                                class="ativ-tag verde">Dinâmico</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('TDAH','Atividade multiformato alternando V/F, lacunas, múltipla escolha — questões curtas de 1-2 linhas')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="TDAH">
+                        <span class="ativ-card-emoji">📝</span>
+                        <div class="ativ-card-titulo">Mini Resumo Guiado</div>
+                        <div class="ativ-card-desc">Preencher um esquema com palavras-chave. Estrutura visual reduz a
+                            sobrecarga e orienta o foco.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag amarelo">Estruturado</span><span
+                                class="ativ-tag amarelo">Visual</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('TDAH','Mini resumo com lacunas e palavras-chave para preencher, blocos curtos com dicas de foco')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="TDAH">
+                        <span class="ativ-card-emoji">🧩</span>
+                        <div class="ativ-card-titulo">Problema com Dicas Progressivas</div>
+                        <div class="ativ-card-desc">Problema dividido em sub-etapas com dica em cada parte. Reduz a
+                            sensação de bloqueio.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag amarelo">Suporte</span><span
+                                class="ativ-tag verde">Progresso</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('TDAH','Problema dividido em sub-etapas com dica de foco em cada parte e enunciados de 1 frase')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="TDAH">
+                        <span class="ativ-card-emoji">🗣️</span>
+                        <div class="ativ-card-titulo">Debate Estruturado Escrito</div>
+                        <div class="ativ-card-desc">Responder 2–3 perguntas curtas de opinião. Formato conversacional
+                            mantém engajamento.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag amarelo">Opinião</span><span
+                                class="ativ-tag amarelo">Interativo</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('TDAH','Debate escrito com 2-3 perguntas curtas de opinião, enunciados diretos e espaço limitado de resposta')">Usar
+                            no Gerador →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── PAINEL DISLEXIA ── -->
+            <div id="painel-Dislexia" class="atividades-painel">
+                <div class="painel-intro">
+                    <span class="painel-intro-icon">📖</span>
+                    <div>
+                        <h3>Dislexia — Dificuldades de Leitura e Escrita</h3>
+                        <p>Prefira múltipla escolha a dissertativa, use frases curtas, numere linhas de enunciado e
+                            sugira fontes ampliadas. Permita resposta oral quando possível.</p>
+                    </div>
+                </div>
+                <div class="atividades-grid">
+                    <div class="ativ-card" data-p="Dislexia">
+                        <span class="ativ-card-emoji">🔤</span>
+                        <div class="ativ-card-titulo">Múltipla Escolha com Enunciado Oral</div>
+                        <div class="ativ-card-desc">Questões de múltipla escolha com enunciado curto. O aluno pode ler
+                            em voz alta ou ter leitura assistida.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag laranja">Acessível</span><span
+                                class="ativ-tag verde">Oral</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('Dislexia','Múltipla escolha com frases curtas, sugestão de leitura oral, espaçamento generoso entre alternativas')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="Dislexia">
+                        <span class="ativ-card-emoji">🖊️</span>
+                        <div class="ativ-card-titulo">Completar Lacunas</div>
+                        <div class="ativ-card-desc">Preencher espaços em branco em frases curtas. Reduz a demanda de
+                            escrita livre e mantém o foco no conteúdo.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag laranja">Escrita mínima</span><span
+                                class="ativ-tag verde">Focado</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('Dislexia','Completar lacunas em frases curtas com banco de palavras, uma frase por linha')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="Dislexia">
+                        <span class="ativ-card-emoji">🔗</span>
+                        <div class="ativ-card-titulo">Ligar Colunas</div>
+                        <div class="ativ-card-desc">Associar termos a definições curtas. Minimiza a necessidade de
+                            escrita e facilita a compreensão.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag laranja">Visual</span><span
+                                class="ativ-tag laranja">Associativo</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('Dislexia','Ligar colunas com termos e definições de até 5 palavras cada, layout espaçado')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="Dislexia">
+                        <span class="ativ-card-emoji">📸</span>
+                        <div class="ativ-card-titulo">Legenda de Imagem</div>
+                        <div class="ativ-card-desc">Escrever 1–2 palavras ou frases muito curtas para legendar imagens.
+                            Reduz demanda de escrita.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag laranja">Criativo</span><span
+                                class="ativ-tag verde">Curto</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('Dislexia','Legenda de imagens com resposta de 1-3 palavras, instruções linha por linha')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="Dislexia">
+                        <span class="ativ-card-emoji">🔢</span>
+                        <div class="ativ-card-titulo">Ordenar Frases ou Eventos</div>
+                        <div class="ativ-card-desc">Numerar frases ou eventos na ordem correta. Trabalha compreensão sem
+                            exigir escrita contínua.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag laranja">Sequencial</span><span
+                                class="ativ-tag laranja">Simples</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('Dislexia','Ordenar frases curtas numerando-as, uma ideia por frase, fonte sugerida 14pt')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="Dislexia">
+                        <span class="ativ-card-emoji">✔️</span>
+                        <div class="ativ-card-titulo">Verdadeiro ou Falso</div>
+                        <div class="ativ-card-desc">Afirmações simples de V/F com linguagem direta. Cada afirmação em
+                            uma linha, sem orações subordinadas longas.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag laranja">Objetivo</span><span
+                                class="ativ-tag verde">Rápido</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('Dislexia','Verdadeiro ou falso com afirmações de até 12 palavras, uma por linha, linguagem simples')">Usar
+                            no Gerador →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── PAINEL DISCALCULIA ── -->
+            <div id="painel-Discalculia" class="atividades-painel">
+                <div class="painel-intro">
+                    <span class="painel-intro-icon">🔢</span>
+                    <div>
+                        <h3>Discalculia — Dificuldades com Raciocínio Numérico</h3>
+                        <p>Use contextos do cotidiano, materiais concretos (régua, blocos), exemplos resolvidos antes
+                            dos exercícios e divida problemas em micro-etapas detalhadas.</p>
+                    </div>
+                </div>
+                <div class="atividades-grid">
+                    <div class="ativ-card" data-p="Discalculia">
+                        <span class="ativ-card-emoji">🛒</span>
+                        <div class="ativ-card-titulo">Problema do Cotidiano</div>
+                        <div class="ativ-card-desc">Situação-problema baseada em compras, receitas ou tempo.
+                            Contextualização concreta facilita a compreensão numérica.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag roxo">Contextual</span><span
+                                class="ativ-tag verde">Cotidiano</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('Discalculia','Problema contextualizado no cotidiano (mercado, receita, horário) dividido em micro-etapas detalhadas')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="Discalculia">
+                        <span class="ativ-card-emoji">📏</span>
+                        <div class="ativ-card-titulo">Exercício com Material Concreto</div>
+                        <div class="ativ-card-desc">Atividade que orienta o uso de régua, tampinhas, palitos ou
+                            calculadora como apoio à resolução.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag roxo">Manipulável</span><span
+                                class="ativ-tag roxo">Concreto</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('Discalculia','Exercício orientando uso de material concreto (régua, objetos) com exemplo resolvido antes das questões')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="Discalculia">
+                        <span class="ativ-card-emoji">🧮</span>
+                        <div class="ativ-card-titulo">Cálculo Passo a Passo</div>
+                        <div class="ativ-card-desc">Problema com espaços para registrar cada operação intermediária.
+                            Reduz a sobrecarga de memória de trabalho.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag roxo">Detalhado</span><span
+                                class="ativ-tag verde">Suporte</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('Discalculia','Cálculo passo a passo com espaço para cada operação intermediária e exemplo modelo resolvido')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="Discalculia">
+                        <span class="ativ-card-emoji">📊</span>
+                        <div class="ativ-card-titulo">Leitura de Gráfico Simples</div>
+                        <div class="ativ-card-desc">Interpretar gráfico de barras ou pictograma com perguntas diretas.
+                            Foco na leitura visual, não no cálculo complexo.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag roxo">Visual</span><span
+                                class="ativ-tag roxo">Interpretação</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('Discalculia','Interpretação de gráfico simples com perguntas diretas, sem operações complexas, contexto visual')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="Discalculia">
+                        <span class="ativ-card-emoji">🔢</span>
+                        <div class="ativ-card-titulo">Sequência Numérica Concreta</div>
+                        <div class="ativ-card-desc">Completar sequências com padrão claro (ex: +2, ×3). Orientado por
+                            diagrama ou imagem de blocos.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag roxo">Padrão</span><span
+                                class="ativ-tag verde">Visual</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('Discalculia','Completar sequências numéricas com padrão explícito e representação visual de blocos ou objetos')">Usar
+                            no Gerador →</button>
+                    </div>
+                    <div class="ativ-card" data-p="Discalculia">
+                        <span class="ativ-card-emoji">🗺️</span>
+                        <div class="ativ-card-titulo">Mapa de Conceitos Numéricos</div>
+                        <div class="ativ-card-desc">Preencher um esquema relacionando conceitos matemáticos com exemplos
+                            concretos e sem muitos números simultâneos.</div>
+                        <div class="ativ-card-tags"><span class="ativ-tag roxo">Esquema</span><span
+                                class="ativ-tag roxo">Relacional</span></div>
+                        <button class="btn-usar-ativ"
+                            onclick="usarAtividade('Discalculia','Mapa de conceitos matemáticos com espaço para exemplos concretos, máximo 2 números por item')">Usar
+                            no Gerador →</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- estado vazio -->
+            <div id="catalogo-vazio"
+                style="text-align:center;padding:3rem 1rem;color:var(--cinza);animation:fadeUp .4s ease;">
+                <div style="font-size:3rem;margin-bottom:1rem;">👆</div>
+                <p style="font-size:1rem;font-weight:600;margin-bottom:.4rem;">Selecione um perfil acima</p>
+                <p style="font-size:.87rem;">para ver as atividades recomendadas</p>
+            </div>
+        </main>
+
+        <footer><strong>EquidadeIA</strong> · CETI Letícia Macedo · 13ª GRE · Piauí · 2026 · Educação Personalizada para
+            Todos</footer>
+    </div>
+
+    <script>
+        // ── LOGIN ──
+        function mascaraCpf(el) {
+            let v = el.value.replace(/\D/g, '').slice(0, 11);
+            if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/, '$1.$2.$3-$4');
+            else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3');
+            else if (v.length > 3) v = v.replace(/(\d{3})(\d{0,3})/, '$1.$2');
+            el.value = v;
+            document.getElementById('cpfErro').style.display = 'none';
+            const d = el.value.replace(/\D/g, '');
+            if (d.length === 11) {
+                if (cpfValido(d)) {
+                    el.style.borderColor = '#1a6b4a';
+                    document.getElementById('campoNome').style.display = 'block';
+                    document.getElementById('campoEscola').style.display = 'block';
+                    document.getElementById('inputNome').focus();
+                } else {
+                    el.style.borderColor = '#dc2626';
+                    document.getElementById('cpfErro').style.display = 'block';
+                    document.getElementById('campoNome').style.display = 'none';
+                    document.getElementById('campoEscola').style.display = 'none';
+                }
+            } else {
+                el.style.borderColor = '#d1d5db';
+                document.getElementById('campoNome').style.display = 'none';
+                document.getElementById('campoEscola').style.display = 'none';
+            }
+        }
+        function cpfValido(c) {
+            if (/^(\d)\1+$/.test(c)) return false;
+            let s = 0; for (let i = 0; i < 9; i++)s += parseInt(c[i]) * (10 - i);
+            let r = (s * 10) % 11; if (r === 10 || r === 11) r = 0; if (r !== parseInt(c[9])) return false;
+            s = 0; for (let i = 0; i < 10; i++)s += parseInt(c[i]) * (11 - i);
+            r = (s * 10) % 11; if (r === 10 || r === 11) r = 0; return r === parseInt(c[10]);
+        }
+        function entrar() {
+            const cpf = document.getElementById('inputCpf').value.replace(/\D/g, '');
+            const nome = document.getElementById('inputNome').value.trim();
+            let ok = true;
+            if (!cpfValido(cpf)) { document.getElementById('cpfErro').style.display = 'block'; ok = false; }
+            if (!nome) { document.getElementById('nomeErro').style.display = 'block'; ok = false; }
+            else document.getElementById('nomeErro').style.display = 'none';
+            if (!ok) return;
+            const p = document.getElementById('pLogin');
+            p.style.transition = 'opacity .5s ease,transform .5s ease';
+            p.style.opacity = '0'; p.style.transform = 'scale(.97)';
+            setTimeout(() => { p.style.display = 'none'; irPara('pGerador'); }, 500);
+        }
+
+        // ── NAVEGAÇÃO ──
+        function irPara(id) {
+            document.querySelectorAll('.pagina').forEach(p => p.classList.remove('ativa'));
+            document.getElementById(id).classList.add('ativa');
+            window.scrollTo(0, 0);
+        }
+
+        // ── CATÁLOGO ──
+        function abrirPainel(p, el) {
+            document.querySelectorAll('.perfil-tab').forEach(t => t.classList.remove('ativo'));
+            el.classList.add('ativo');
+            document.querySelectorAll('.atividades-painel').forEach(a => a.classList.remove('ativo'));
+            document.getElementById('painel-' + p).classList.add('ativo');
+            document.getElementById('catalogo-vazio').style.display = 'none';
+        }
+
+        function usarAtividade(perfil, descricao) {
+            irPara('pGerador');
+            // pré-selecionar perfil
+            document.querySelectorAll('.perfil-card').forEach(c => {
+                c.classList.remove('ativo');
+                if (c.dataset.perfil === perfil) c.classList.add('ativo');
+            });
+            perfilSelecionado = perfil;
+            // preencher textarea
+            document.getElementById('conteudo').value = descricao;
+            document.getElementById('conteudo').focus();
+            document.getElementById('conteudo').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // ── GERADOR ──
+        let perfilSelecionado = '', adaptacoesSelecionadas = [];
+        function selecionarPerfil(el) {
+            document.querySelectorAll('.perfil-card').forEach(c => c.classList.remove('ativo'));
+            el.classList.add('ativo');
+            perfilSelecionado = el.dataset.perfil;
+        }
+        function toggleChip(el) {
+            el.classList.toggle('ativo');
+            const v = el.textContent.trim();
+            if (el.classList.contains('ativo')) adaptacoesSelecionadas.push(v);
+            else adaptacoesSelecionadas = adaptacoesSelecionadas.filter(a => a !== v);
+        }
+        function mostrarErro(msg) {
+            const b = document.getElementById('erroBox');
+            b.textContent = msg; b.classList.add('visivel');
+            setTimeout(() => b.classList.remove('visivel'), 6000);
+        }
+        function copiarResultado() {
+            navigator.clipboard.writeText(document.getElementById('resultadoBox').innerText).then(() => {
+                const b = document.querySelector('.btn-copiar');
+                b.textContent = '✅ Copiado!';
+                setTimeout(() => b.textContent = '📋 Copiar texto', 2000);
+            });
+        }
+        function renderizarMarkdown(t) {
+            return t
+                .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+                .replace(/^## (.+)$/gm, '<h3>$1</h3>')
+                .replace(/^# (.+)$/gm, '<h3>$1</h3>')
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                .replace(/^---+$/gm, '<hr style="border:none;border-top:1px solid #eee;margin:1rem 0">')
+                .replace(/\n/g, '<br>');
+        }
+        async function gerarAtividade() {
+            if (!perfilSelecionado) return mostrarErro('⚠️ Selecione o perfil neurodivergente do aluno.');
+            const conteudo = document.getElementById('conteudo').value.trim();
+            if (!conteudo) return mostrarErro('⚠️ Descreva o conteúdo que deseja trabalhar.');
+            const disciplina = document.getElementById('disciplina').value;
+            if (!disciplina) return mostrarErro('⚠️ Selecione a disciplina.');
+            const serie = document.getElementById('serie').value;
+            document.getElementById('btnGerar').disabled = true;
+            document.getElementById('loadingArea').classList.add('visivel');
+            document.getElementById('resultadoArea').classList.remove('visivel');
+            document.getElementById('erroBox').classList.remove('visivel');
+            const adapt = adaptacoesSelecionadas.length > 0
+                ? `Aplicar: ${adaptacoesSelecionadas.join(', ')}.`
+                : 'Adaptações gerais adequadas ao perfil.';
+
+            const systemPrompt = `Você é um Pedagogo Especialista em Educação Inclusiva e Neurodiversidade. Sua missão é criar materiais didáticos adaptados que garantam a equidade no aprendizado.
+DIRETRIZES DE ADAPTAÇÃO POR PERFIL
+- TEA: Linguagem literal, estrutura visual clara, sem ambiguidades ou metáforas. Instruções passo a passo (1 ação por etapa).
+- TDAH: Textos fragmentados, dinâmicos, com recompensas implícitas. Foco na quebra de atividades em micro-tarefas para não sobrecarregar.
+- Dislexia: Frases curtas, espaçamento generoso, evitar grandes blocos de texto, linguagem direta e uso preferencial de opções objetivas.
+- Discalculia: Contextualização matemática no cotidiano, suporte visual explícito, exemplos práticos resolvidos antes dos exercícios.`;
+
+            const userPrompt = `Crie uma atividade estruturada com os seguintes parâmetros:
+* Perfil do Aluno: ${perfilSelecionado}
+* Disciplina: ${disciplina}
+* ${serie ? `Ano/Série: ${serie}` : 'Série não especificada'}
+* Tema/Conteúdo: ${conteudo}
+* Adaptações Solicitadas: ${adapt}
+
+A atividade DEVE conter a seguinte estrutura formatada em Markdown:
+1. **Cabeçalho:** Nome, Data, Turma.
+2. **Objetivo da Atividade:** Em linguagem simples para o aluno (1 frase).
+3. **Explicação:** Uma introdução breve super adaptada ao perfil ${perfilSelecionado}.
+4. **Questões Práticas:** 3 a 4 questões aplicadas, usando as adaptações solicitadas.
+5. **Nota ao Professor:** Dica rápida (máximo 3 linhas) de como aplicar a atividade.
+
+Responda APENAS com a atividade (sem introduções suas). Use formatação Markdown (negrito, emojis educacionais). Português brasileiro acolhedor.`;
+
+            try {
+                const models = ['llama-3.3-70b-versatile', 'llama-3.1-8b-instant', 'mixtral-8x7b-32768'];
+                let data = null;
+                let lastError = null;
+
+                for (const model of models) {
+                    try {
+                        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer gsk' + '_a5x3WNQb7vRjC5it5q5OWGdy' + 'b3FYnasJvuRcphOGBo3c8XbZ3UVI'
+                            },
+                            body: JSON.stringify({
+                                model: model,
+                                temperature: 0.4,
+                                messages: [
+                                    { role: 'system', content: systemPrompt },
+                                    { role: 'user', content: userPrompt }
+                                ]
+                            })
+                        });
+                        if (!res.ok) {
+                            const e = await res.json().catch(() => ({}));
+                            throw new Error(e.error?.message || `HTTP ${res.status}`);
+                        }
+                        data = await res.json();
+                        break; // Se funcionou, sai do loop
+                    } catch (err) {
+                        lastError = err;
+                        console.warn(`Erro com o modelo ${model}: ${err.message}. Tentando o próximo...`);
+                    }
+                }
+
+                if (!data) {
+                    throw new Error('Nenhum modelo da API respondeu. Erro: ' + (lastError?.message || 'Desconhecido'));
+                }
+
+                const texto = data.choices[0].message.content;
+                const em = { TEA: '🔵', TDAH: '⚡', Dislexia: '📖', Discalculia: '🔢' };
+                document.getElementById('tagPerfil').innerHTML = `${em[perfilSelecionado]} Adaptado para ${perfilSelecionado} · ${disciplina}${serie ? ' · ' + serie : ''}`;
+                document.getElementById('resultadoBox').innerHTML = renderizarMarkdown(texto);
+                document.getElementById('resultadoArea').classList.add('visivel');
+                document.getElementById('resultadoArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch (err) {
+                mostrarErro('❌ Erro: ' + err.message);
+            } finally {
+                document.getElementById('btnGerar').disabled = false;
+                document.getElementById('loadingArea').classList.remove('visivel');
+            }
+        }
+    </script>
 </body>
+
 </html>
