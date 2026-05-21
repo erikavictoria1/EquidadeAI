@@ -19,9 +19,37 @@ body{font-family:'DM Sans',sans-serif;background:var(--branco);color:var(--cinza
 .pagina.ativa{display:block;}
 #bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
 header,main,footer,.login-wrap{position:relative;z-index:1;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
 </style>
 </head>
 <body>
-<!-- Conteúdo será adicionado aqui -->
+
+<div id="pLogin" class="pagina ativa" style="background:linear-gradient(135deg,#1a4fa3 0%,#1a6b4a 60%,#2d8a5e 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;">
+  <div style="background:rgba(255,255,255,.97);border-radius:24px;padding:2.5rem 2rem;width:100%;max-width:420px;box-shadow:0 24px 60px rgba(0,0,0,.3);position:relative;z-index:1;">
+    <h2 style="font-family:'Fraunces',serif;font-size:1.2rem;font-weight:700;color:#1c1c1e;text-align:center;margin-bottom:.4rem;">Acesso ao Sistema</h2>
+    <div style="margin-bottom:1.1rem;">
+      <label style="display:block;font-size:.74rem;font-weight:700;color:#1a4fa3;margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.5px;">CPF do Professor</label>
+      <input id="inputCpf" type="text" inputmode="numeric" maxlength="14" placeholder="000.000.000-00" oninput="mascaraCpf(this)" style="width:100%;border:2px solid #d1d5db;border-radius:12px;padding:.8rem 1rem;"/>
+    </div>
+    <button onclick="entrar()" style="width:100%;background:linear-gradient(135deg,#1a4fa3,#1a6b4a);color:white;border:none;border-radius:14px;padding:1rem;font-weight:700;cursor:pointer;">Acessar Plataforma →</button>
+  </div>
+</div>
+
+<script>
+function mascaraCpf(el) {
+  let v = el.value.replace(/\D/g,'').slice(0,11);
+  if(v.length>9) v=v.replace(/(\d{3})(\d{3})(\d{3})(\d{0,2})/,'$1.$2.$3-$4');
+  else if(v.length>6) v=v.replace(/(\d{3})(\d{3})(\d{0,3})/,'$1.$2.$3');
+  else if(v.length>3) v=v.replace(/(\d{3})(\d{0,3})/,'$1.$2');
+  el.value=v;
+}
+function entrar() {
+  alert("Login será implementado depois");
+}
+function irPara(id){
+  document.querySelectorAll('.pagina').forEach(p=>p.classList.remove('ativa'));
+  document.getElementById(id).classList.add('ativa');
+}
+</script>
 </body>
 </html>
